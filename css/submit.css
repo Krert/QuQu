@@ -1,0 +1,8 @@
+table#submit input[type="text"]{
+	width: 400px;
+}
+
+table#submit textarea {
+	width: 400px;
+	height: 190px;
+}

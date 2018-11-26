@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+	body {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-70%,-70%);
+	}
+
+	input[type="text"], input[type="password"]{
+		border: none;
+		border-bottom: 2px solid #FF6600;
+	}
+	</style>
+</head>
+<body>
+	<b>Login</b>
+	<br>
+	<br>
+	<form method="post" action="login">
+		<table id="login">
+			<tr>
+				<td>username:</td>
+				<td><input type="text" name="acct" size="20" autocorrect="off" spellcheck="false" autocapitalize="off"></td>
+			</tr>
+			<tr>
+				<td>password:</td>
+				<td><input type="password" name="pw" size="20"></td>
+			</tr>
+		</table>
+		<br>
+		<input type="submit" value="login">
+	</form>
+	<br>
+	<a href="">Forgot your password?</a>
+	<br>
+	<br>
+	<b>Create Account</b>
+	<br>
+	<br>
+	<form method="post" action="login">
+		<input type="hidden" name="creating" value="true">
+		<table id="login">
+			<tr>
+				<td>username:</td>
+				<td><input type="text" name="acct" size="20" autocorrect="off" spellcheck="false" autocapitalize="off"></td>
+			</tr>
+			<tr>
+				<td>password:</td>
+				<td><input type="password" name="pw" size="20"></td>
+			</tr>
+		</table>
+		<br>
+		<input type="submit" value="create account">
+	</form>
+
+
+</body>
+</html>

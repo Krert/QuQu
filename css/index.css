@@ -1,0 +1,8 @@
+body {
+	font-family: Verdana;
+}
+
+a, a:link {
+	text-decoration: none;
+	color: black;
+}

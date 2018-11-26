@@ -1,0 +1,40 @@
+table#item {
+	border-collapse: collapse;
+	margin-top: 2px;
+	font-size: 14px;
+}
+
+table#item td {
+	padding: 0px 2px;
+}
+
+table#item tr {
+}
+
+table#item tr:nth-of-type(1) td:nth-child(1){
+	color: #828282;
+}
+
+table#item tr:nth-of-type(1) td:nth-child(2){
+	color: #828282;
+}
+
+table#item tr:nth-of-type(2) td:nth-last-child(1) {
+	color: #828282;
+	font-size: 10px;
+}
+
+table#item tr:nth-of-type(3) td:nth-last-child(1){
+	color: #828282;
+	font-size: 14px;
+}
+
+tr.date td:nth-last-child(1) {
+	color: #828282;
+	font-size: 10px;
+}
+
+table#item textarea {
+	width: 500px;
+	height: 90px;
+}

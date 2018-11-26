@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+	<style type="text/css">
+		ul#show {
+			list-style: none;
+			padding: 0px;
+			margin: 0;
+			width: 150px;
+			height: 200;
+			overflow: scroll;
+ 			box-shadow: 1px 1px 1px 1px #d8d8d8;
+ 		}
+
+		ul#show:empty {
+			display: none;
+		}
+
+		ul#show li {
+		}
+
+		ul#show li:hover {
+			cursor: default;
+			background-color: lightblue;
+		}
+	</style>
+<body>
+	<input type="text" id="text" onkeyup="onkey(this);">
+	<ul id="show"></ul>
+<script type="text/javascript">
+function $id(i) { return document.getElementById(i); }
+function $crE(i) { return document.createElement(i); }
+function $crT(i) { return document.createTextNode(i); }
+var current, input;
+
+function onkey(current){
+	input = current.value;
+	console.log("onkey() => " + input);
+	testStr(input);
+}
+
+function testStr(input) {
+	if(!input) return $id("show").innerHTML = "";
+	var result = new Array();
+	var str = ["javascript", "html", "java", "php5","Ruby","html5"];
+	var pattern = "^" + input + ".*";
+	var regExp = new RegExp(pattern,"g");
+	for(r in str){
+		if( regExp.test(str[r]) ) result.push(str[r]);
+	}
+	console.log(result);
+	show(result);
+}
+
+function show(result) {
+	$id("show").innerHTML = "";
+	if(!result) return;
+	for(r in result){
+		var li = $crE("li");
+			li.appendChild($crT(result[r]));
+			li.setAttribute("onclick", "insert(this)");
+		$id("show").appendChild(li);
+		console.log(li);
+	}
+}
+
+function insert(el){
+	$id("text").value = el.innerHTML;
+	$id("show").innerHTML = "";
+}
+</script>
+</body>
+</html>
