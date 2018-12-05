@@ -2,6 +2,7 @@
 include "dbconnect.php";
 function sqLinsert($table,$columns,$values){
 	global $conn;
+	global $sql;
 	$sql = "INSERT INTO $table ($columns) VALUES ($values)";
 	if($conn->query($sql)):
 		return true;
@@ -16,31 +17,55 @@ function sqLselect($slctColumn,$table,$match){
 	global $dbData;
 	$sql = "SELECT $slctColumn FROM $table $match";
 	$result = $conn->query($sql);
-	if($result):
+	if($result->num_rows > 0):
 		return getdata($result,$slctColumn);
 	else:
 		return false;
 	endif;
 }
 
-function sqLupdate($table,$setData,$matchColumn,$matchValue,$afterQuery){
+function sqLsearch($slctColumn,$table,$matchColumn,$value){
 	global $conn;
-	$sql = "UPDATE $table SET $setData WHERE $matchColumn = '$matchValue'";
-	if($conn->query($sql)):
-		$afterQuery();
+	global $result;
+	global $dbData;
+	global $sql;
+	$sql = "SELECT $slctColumn FROM $table WHERE $matchColumn LIKE '$value%'";
+	$result = $conn->query($sql);
+	if($result->num_rows > 0):
+		return getdata($result,$slctColumn);
 	else:
-		echo "Error" . $conn->error;
+		return false;
 	endif;
 }
 
-function sqLdelete($table,$matchColumn,$matchValue,$afterQuery){
+function sqLupdate($table,$setData,$matchColumn,$matchValue){
+	global $conn;
+	$sql = "UPDATE $table SET $setData WHERE $matchColumn = '$matchValue'";
+	if($conn->query($sql)):
+		return true;
+	else:
+		return false;
+	endif;
+}
+
+function sqLupdate2($table,$setData,$matchColumn,$matchValue){
+	global $conn;
+	$sql = "UPDATE $table SET $setData WHERE $matchColumn = $matchValue";
+	if($conn->query($sql)):
+		return true;
+	else:
+		return false;
+	endif;
+}
+
+function sqLdelete($table,$matchColumn,$matchValue){
 	global $conn;
 	$sql = "DELETE FROM $table WHERE $matchColumn = '$matchValue'";
-		if(!$result = $conn->query($sql)):
-			echo $conn->error;
-			exit;
+		if($conn->query($sql)):
+			return true;
+		else:
+			return false;
 		endif;
-	$afterQuery();
 }
 
 function getData($result,$slctColumn){

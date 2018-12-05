@@ -16,31 +16,20 @@ endif;
 
 	if($_GET && $_GET["Qid"]):
 		$Qid = optmzStr($_GET["Qid"], "low");
-
+		$location= "Location: ./edititem.php?Qid=" . $Qid; 
 		//sql Question
 		$slctColumn = "title,text,name,date";
 		$table = "questions";
 		$match = "WHERE questionID = $Qid";
 		if(sqLselect($slctColumn,$table,$match)):
 			$max = count($dbData);
+			$QData = $dbData;
 			for($i = 0; $i < $max; $i++):
-				echoQ($Qid,$dbData[$i]["title"],$dbData[$i]["text"],$dbData[$i]["name"],$dbData[$i]["date"]);
+				if($QData[$i]["name"] != $_SESSION["name"]) header($location);
+				echoQ($Qid,$QData[$i]["title"],$QData[$i]["text"],$QData[$i]["name"],$QData[$i]["date"]);
 			endfor;
 		else:
 			$error = "<b>!Error! *O Maybe you can not post answers.Q<b>" . $conn->error;
-		endif;
-
-		//sql Answer
-		$slctColumn = "text,name,date";
-		$table = "answers";
-		if(sqLselect($slctColumn,$table,$match) && $result->num_rows > 0):
-			$max = count($dbData);
-			$NumAns = $max;
-			for($i = 0; $i < $max; $i++):
-				echoA($dbData[$i]["text"],$dbData[$i]["name"],$dbData[$i]["date"]);
-			endfor;
-		else:
-				echoA("Not yet answer.","admin","");
 		endif;
 
 	else://if there is no $_GET, it will display top page;
@@ -48,24 +37,25 @@ endif;
 	endif;
 
 	//post
-	if($login && isset($_POST["text"])):
-		$location= "Location: ./item.php?Qid=" . $Qid; 
+	if($login && $_POST && $_POST["text"]):
+		$name = $_SESSION["name"];
 		$text = optmzStr($_POST["text"],"low");
-		$id = $_SESSION["id"];
+		$date = date('Y-m-d');
 		if(strlen($text) === 0):
 			header($location);
 			exit;
 		endif;
-		$date = date('Y-m-d');
+		$newText = $QData[0]["text"] . "<br><br>---". $date . " add------------------<br>" . $text;
 
-		//sql 
-		$table = "answers";
-		$columns = "text,id,name,questionID,date";
-		$values = "'$text',$id,'$name','$Qid','$date'";
-			if(sqLinsert($table,$columns,$values)):
+		//sql
+		$table = "questions";
+		$setData = "text = '$newText'";
+		$matchColumn = "questionID";
+		$matchValue = $Qid;
+			if(sqLupdate2($table,$setData,$matchColumn,$matchValue)):
 				header($location);
 			else:
-				$error = "!ERROR! We could not post your answer.";
+				$error = "SQL ERROR(code:134). Please try again. If it always happen, please tell me code." . $conn->error;
 			endif;
 
 	else:
@@ -95,21 +85,6 @@ $htmlQ .= <<< EOS
 EOS;
 }
 
-function echoA($text,$name,$date){
-global $htmlA;
-$htmlA .= <<< EOS
-	<tr class="text">
-	<td></td>
-	<td></td>
-	<td>{$text}</td>
-	</tr>
-	<tr class="date">
-	<td></td>
-	<td></td>
-	<td>{$date} by {$name}</td>
-	</tr>
-EOS;
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -129,7 +104,7 @@ EOS;
 			</b>
 			&nbsp; 
 			&nbsp;
-			<a href="./submit.php">submit</a>
+			<a href="./php/submit.php">submit</a>
 		</td>
 		<td>
 			<!-- login or name | logout -->
@@ -154,17 +129,10 @@ EOS;
 						<td colspan="2"></td>
 						<td>
 						<br>
-						<input type="submit" value="add comment">
+						<input type="submit" value="add question">
 						</td>
 					</tr>
 					</form>
-					<tr>
-					<td colspan="2">
-						(<?php echo $NumAns = ($NumAns) ? $NumAns : "0" ; ?>)
-					</td>
-					<td></td>
-					</tr>
-					<?php echo $htmlA = ($htmlA) ? $htmlA : "" ; ?>
 				</table>
 			</td>
 		</tr>

@@ -14,3 +14,7 @@ input[type="text"], input[type="password"] {
 	border: none;
 	border-bottom: 1px solid #FF6600;
 }
+
+table#login {
+	text-align: right;
+}

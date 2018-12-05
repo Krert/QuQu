@@ -2,9 +2,10 @@
 include "./php/loginCheck.php";
 include "./php/sqlQuery.php";
 $error = "";
+$html = "";
 	if(loginCheck()):
 		$name = $_SESSION["name"];
-		$str = '<a href="">' . $name . '</a>&nbsp;|&nbsp;<a href="./php/logout.php">logout</a>';
+		$str = '<a href="./php/profile.php">' . $name . '</a>&nbsp;|&nbsp;<a href="./php/logout.php">logout</a>';
 	else:
 		$str = '<a href="./PHP/login.php">login</a>';
 	endif;
@@ -27,7 +28,7 @@ global $html;
 $html .= <<< EOS
 	<tr>
 	<td>{$id}.</td>
-	<td>☆</td>
+	<td></td>
 	<td><a href="./php/item.php?Qid={$id}">{$title}</a></td>
 	</tr>
 	<tr>
@@ -55,8 +56,11 @@ EOS;
 			&nbsp; 
 			&nbsp;
 			<a href="./php/submit.php">submit</a>
+			&nbsp; 
+			&nbsp;
+			<a href="./php/search.php">search</a>
 		</td>
-		<td>
+		<td id="profile">
 			<!-- login or name | logout -->
 			<?php echo $str ?>
 		</td>
@@ -65,7 +69,7 @@ EOS;
 			<td colspan="2">
 				<span><?php echo $error = ($error) ? $error : ""; ?></span>
 				<table id="conts">
-				<?php echo $html ?>
+				<?php echo $html = ($html) ? $html : "No more problem" ?>
 				</table>
 			</td>
 		</tr>

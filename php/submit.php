@@ -6,23 +6,27 @@ $error = "";
 if(!loginCheck()) header('Location: ./login.php');
 
 if($_POST && $_POST["title"] && $_POST["text"]):
-	$title = optmzStr($_POST["title"],"low");
+	$title = optmzStr($_POST["title"],"hight");
 	$text = optmzStr($_POST["text"],"low");
 	if($title && $text):
 		$name = $_SESSION["name"];
+		$id = $_SESSION["id"];
 		$date = date("Y-m-d");
 		//sql
 		$table = "questions";
-		$columns = "title,text,name,date";
-		$value = "'$title','$text','$name','$date'";
+		$columns = "title,text,id,name,date";
+		$value = "'$title','$text',$id,'$name','$date'";
 			if(sqLinsert($table,$columns,$value)):
 				header('Location: ../indeex.php');
 			else:
-				$error = "SQL ERROR(code:234). Please try again. If it always happen, please tell me code.";
+				echo $sql;
+				$error = "SQL ERROR(code:234). Please try again. If it always happen, please tell me code." . $conn->error;
 			endif;
 	else:
-		$error = "this is main if Bad strings. Please try again.";
+		$error = "Error.Your post is too long or too short.We can not allow over 1000 strings.";
 	endif;
+else:
+	$error = "please put string both";
 endif;
 ?>
 <!DOCTYPE html>
@@ -36,14 +40,14 @@ endif;
 <body>
 <center>
 <table id="main">
-	<tr id="topsel">
+	<tr id="menu">
 		<td>
 			<b>
 				<a href="../indeex.php">QuQu</a>
 			</b>
 			&nbsp; 
 			&nbsp;
-			<a href="">submit</a>
+			<a href="./submit.php">submit</a>
 		</td>
 		</tr>
 		<tr>

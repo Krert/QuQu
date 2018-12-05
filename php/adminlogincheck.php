@@ -1,7 +1,7 @@
 <?php
 session_start();
 function loginCheck(){
-if($_SESSION && $_SESSION["login"]):
+if($_SESSION && isset($_SESSION["admin"])):
 	return true;
 else:
 	return false;

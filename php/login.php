@@ -15,9 +15,8 @@ if($_POST && $_POST["acct"] && $_POST["pw"]):
 	if($submit === "login" && $username && $pw):
 		$table = "user_profile";
 		$slctColumn = "name,id,pw";
-		$matchColumn = "name";
-		$matchValue = $username;
-			if(sqLselect($slctColumn,$table,$matchColumn,$matchValue) && pwCheck()):
+		$match = "WHERE name = '$username'";
+			if(sqLselect($slctColumn,$table,$match) && pwCheck()):
 				setSESSION($dbData[0]["name"]);
 				header('Location: ../indeex.php');
 			else:
@@ -29,21 +28,34 @@ if($_POST && $_POST["acct"] && $_POST["pw"]):
 		$table = "user_profile";
 		$columns = "name,pw";
 		$values = "'$username','$pw'";
+
 			// sql
-			if(sqLinsert($table,$columns,$values)):
+			if(nameCheck($username) && sqLinsert($table,$columns,$values)):
 				setSESSION($username);
 				header('Location: ../indeex.php');
 			else:
-				$error = "Bad strings. Please try again other words.";
+				$error = "Bad strings or your name aleady use. Please try again other words.";
 			endif;
 	endif;
 
 endif;
 
+function nameCheck($username){
+	global $dbData;
+	$table = "user_profile";
+	$slctColumn = "name";
+	$match = "WHERE name = '$username'";
+		if(sqLselect($slctColumn,$table,$match)):
+			return false;
+		else:
+			return true;
+		endif;
+}
+
 function pwCheck(){
 	global $pw;
 	global $dbData;
-		if($pw != $dbData[0]["pw"]):
+		if($dbData && $pw != $dbData[0]["pw"]):
 			return false;
 		endif;
 
@@ -51,8 +63,21 @@ function pwCheck(){
 }
 
 function setSESSION($name){
+	global $dbData;
 	$_SESSION["login"] = true;
 	$_SESSION["name"] = $name;
+
+	$table = "user_profile";
+	$slctColumn = "id";
+	$match = "WHERE name = '$name'";
+	if(sqLselect($slctColumn,$table,$match)):
+		$_SESSION["id"] = $dbData[0]["id"];
+		header('Location: ../indeex.php');
+	else:
+		$error = "error(code:222)";
+	endif;
+
+
 }
 ?>
 <!DOCTYPE html>
@@ -89,7 +114,6 @@ function setSESSION($name){
 		<input type="submit" name="submit" value="login">
 	</form>
 	<br>
-	<a href="">Forgot your password?</a>
 	<br>
 	<br>
 <!-- create account -->

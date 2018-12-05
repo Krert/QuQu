@@ -6,8 +6,8 @@ function optmzStr($string,$level){
 	$string = rtrim($string); // \n hogehoge \n => \n hogehoge 
 
 	//count length of str
-	$strlen = strlen($string);
-	if($strlen < 2 && $strlen > 400) return false;
+	$strlen = mb_strlen($string);
+	if($strlen < 3 || $strlen > 1000) return false;
 
 
 	if($level === "hight" && $strlen < 20):

@@ -1,0 +1,17 @@
+table#submit {
+	font-size: 14px;
+	text-align: left;
+}
+
+table#submit #tr_name td:nth-of-type(2) {
+	font-weight: bold;
+}
+
+table#submit input[type="text"] {
+	width: 200px;
+	float: left;
+}
+
+table#submit #tr_about input[type="text"] {
+	width: 400px;
+}
